@@ -194,10 +194,11 @@ function PublicInventory({ inventory }) {
         borderBottom: `1px solid ${C.cardBorder}`,
         padding: "40px 40px 32px",
         background: `linear-gradient(160deg, #171614 0%, ${C.bg} 60%)`,
+        width: "100%",
       }}>
         <div style={{ fontFamily: "'Barlow Condensed'", fontSize: 11, letterSpacing: 3, textTransform: "uppercase", color: C.accent, marginBottom: 10 }}>Cincinnati, Ohio</div>
         <h1 style={{ fontFamily: "'Playfair Display'", fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 700, lineHeight: 1.1, marginBottom: 12 }}>Current Inventory</h1>
-        <p style={{ color: C.muted, fontSize: 15, maxWidth: 480, lineHeight: 1.6 }}>
+        <p style={{ color: C.muted, fontSize: 15, lineHeight: 1.6 }}>
           Curated classic Porsches — each inspected, serviced, and ready for the next enthusiast.
         </p>
         <div style={{ marginTop: 20, display: "flex", gap: 32 }}>
