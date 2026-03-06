@@ -257,7 +257,7 @@ function PublicInventory({ inventory }) {
       {/* Hero strip */}
       <div style={{
         borderBottom: `1px solid ${C.cardBorder}`,
-        padding: "48px 40px 40px",
+        padding: "40px 24px 32px",
         background: `linear-gradient(160deg, #171614 0%, ${C.bg} 60%)`,
       }}>
         <div style={{
@@ -282,7 +282,7 @@ function PublicInventory({ inventory }) {
       </div>
 
       {/* Grid */}
-      <div style={{ padding: "40px" }}>
+      <div style={{ padding: "24px" }}>
         {active.length === 0 ? (
           <div style={{ textAlign: "center", padding: "80px 0", color: C.muted }}>
             <div style={{ fontSize: 40, marginBottom: 12, opacity: 0.3 }}>◎</div>
@@ -292,7 +292,7 @@ function PublicInventory({ inventory }) {
         ) : (
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
             gap: 24,
           }}>
             {active.map((car, i) => (
