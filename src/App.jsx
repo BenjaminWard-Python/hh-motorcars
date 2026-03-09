@@ -544,6 +544,118 @@ function RestorationPage() {
   );
 }
 
+// ─── Sales Contact Form ───────────────────────────────────────────────────────
+// TODO: Replace the TO_EMAILS array below with the actual recipient addresses when ready.
+const TO_EMAILS = [
+  "sales@hhmotorcars.com",   // ← replace with final email #1
+  "owner@hhmotorcars.com",   // ← replace with final email #2
+];
+
+function SalesContactForm() {
+  const [form, setForm] = useState({ name:"", email:"", phone:"", interest:"", message:"" });
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+  const set = (k, v) => setForm(f => ({...f, [k]: v}));
+
+  const handleSubmit = () => {
+    if (!form.name || !form.email || !form.message) {
+      setStatus("error");
+      return;
+    }
+    // Build a mailto: link targeting all recipients
+    const to = TO_EMAILS.join(",");
+    const subject = encodeURIComponent(`Sales Inquiry from ${form.name}`);
+    const body = encodeURIComponent(
+      `Name: ${form.name}\n` +
+      `Email: ${form.email}\n` +
+      `Phone: ${form.phone || "Not provided"}\n` +
+      `Vehicle Interest: ${form.interest || "Not specified"}\n\n` +
+      `Message:\n${form.message}`
+    );
+    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+    setStatus("sent");
+    setForm({ name:"", email:"", phone:"", interest:"", message:"" });
+  };
+
+  return (
+    <div className="section section-alt">
+      <div className="two-col" style={{alignItems:"center"}}>
+        {/* Left: info panel */}
+        <div>
+          <div className="section-eyebrow">Get In Touch</div>
+          <h2 className="section-title">Interested in a Vehicle?</h2>
+          <div className="gold-rule"/>
+          <p className="section-body" style={{marginBottom:16}}>
+            Whether you're inquiring about a specific listing, looking for a vehicle we don't currently have in stock, or simply want expert guidance on acquiring a classic Porsche — we're here to help.
+          </p>
+          <p className="section-body" style={{marginBottom:32}}>
+            Fill out the form and a member of the HH Motorcars team will be in touch shortly. You can also reach us directly by phone or email below.
+          </p>
+          <div style={{display:"flex",flexDirection:"column",gap:16}}>
+            {[["📞 Phone","513.909.0280"],["✉️ Email","sales@hhmotorcars.com"],["📍 Address","16 East 72nd Street, Cincinnati, OH 45216"],["🕐 Hours","Mon–Fri, 8:00am – 5:00pm"]].map(([label,value])=>(
+              <div key={label} style={{display:"flex",gap:12,alignItems:"flex-start"}}>
+                <span style={{fontSize:14,minWidth:100,color:C.muted}}>{label}</span>
+                <span style={{fontSize:14,color:C.text,fontWeight:500}}>{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right: form */}
+        <div style={{background:"#fff",border:`1px solid ${C.border}`,padding:40}}>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
+            <div className="field-group" style={{marginBottom:0}}>
+              <label>Full Name *</label>
+              <input value={form.name} onChange={e=>set("name",e.target.value)} placeholder="John Smith"/>
+            </div>
+            <div className="field-group" style={{marginBottom:0}}>
+              <label>Email Address *</label>
+              <input type="email" value={form.email} onChange={e=>set("email",e.target.value)} placeholder="john@email.com"/>
+            </div>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
+            <div className="field-group" style={{marginBottom:0}}>
+              <label>Phone Number</label>
+              <input type="tel" value={form.phone} onChange={e=>set("phone",e.target.value)} placeholder="(513) 555-0100"/>
+            </div>
+            <div className="field-group" style={{marginBottom:0}}>
+              <label>Vehicle of Interest</label>
+              <input value={form.interest} onChange={e=>set("interest",e.target.value)} placeholder="e.g. 1987 Porsche 911 Targa"/>
+            </div>
+          </div>
+          <div className="field-group">
+            <label>Message *</label>
+            <textarea
+              value={form.message}
+              onChange={e=>set("message",e.target.value)}
+              rows={5}
+              placeholder="Tell us what you're looking for, any questions you have, or anything else we should know..."
+              style={{resize:"vertical"}}
+            />
+          </div>
+
+          {status==="error" && (
+            <div style={{color:C.red,fontSize:13,marginBottom:16,padding:"10px 14px",background:"#fef2f2",border:`1px solid ${C.red}33`}}>
+              Please fill in your name, email, and message before submitting.
+            </div>
+          )}
+          {status==="sent" && (
+            <div style={{color:C.green,fontSize:13,marginBottom:16,padding:"10px 14px",background:"#e8f5e8",border:`1px solid ${C.green}33`}}>
+              ✓ Your email client has been opened with your inquiry. We look forward to connecting with you!
+            </div>
+          )}
+
+          <button className="btn-primary" onClick={handleSubmit} style={{width:"100%",padding:"14px 28px",fontSize:13}}>
+            Send Inquiry
+          </button>
+          <p style={{fontSize:11,color:C.muted,marginTop:12,textAlign:"center",lineHeight:1.6}}>
+            Submitting will open your email client with your message pre-filled.<br/>Your information is never shared or sold.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Sales ────────────────────────────────────────────────────────────────────
 function SalesPage({ inventory }) {
   const [selected, setSelected] = useState(null);
@@ -605,26 +717,8 @@ function SalesPage({ inventory }) {
         )}
       </div>
 
-      {/* Buying program with real photos */}
-      <div className="section section-alt">
-        <div className="section-eyebrow">Our Buying Program</div>
-        <h2 className="section-title">Acquiring a Porsche the Right Way</h2>
-        <div className="gold-rule"/>
-        <div className="two-col" style={{marginTop:32}}>
-          <div>
-            <p className="section-body" style={{marginBottom:16}}>If you are looking to acquire a classic Porsche, HH Motorcars provides a program to facilitate your acquisition. Our knowledge base of classic Porsches is second to none.</p>
-            <p className="section-body" style={{marginBottom:16}}>A reliable and knowledgeable shop can guide, advise, and help you maintain your classic Porsche. We don't just sell you a car — we help you become a confident, informed Porsche owner.</p>
-            <p className="section-body" style={{marginBottom:28}}>Don't see what you're looking for? We source vehicles to order. Contact us with your wish list and we'll find the right car for you.</p>
-            <a href="mailto:sales@hhmotorcars.com" className="btn-primary">Contact About Purchasing</a>
-          </div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:4}}>
-            {[IMG.salesCar1,IMG.salesCar2,IMG.salesCar3,IMG.classic9].map((src,i)=>(
-              <img key={i} src={src} alt="Porsche for sale" style={{width:"100%",height:180,objectFit:"cover",display:"block"}}
-                onError={e=>{e.target.style.display="none"}}/>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* Contact Form */}
+      <SalesContactForm />
 
       <ContactBar/><Footer/>
     </div>
